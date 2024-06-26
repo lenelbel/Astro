@@ -20,22 +20,22 @@ def calculate_mean_luminosity(images_folders, events_folders, folder_names):
     """
 
     mean_luminosity = []
-    for i, events_folder in enumerate(events_folders): # Начинается цикл по всем папкам с событиями, при этом i - индекс текущего элемента, events_folder - сама папка
-        event_files = natsorted(os.listdir(events_folder)) #Получаем список изображений в папке events_folder и сортируем их естественным образом
-        images_folder = images_folders[i] # Получаем соответствующую папку с изображениями активности из images_folders по индексу i
-        image_files = natsorted(os.listdir(images_folder)) # Получаем список изображений в images_folder и сортируем их естественным образом
-        total_luminosity = 0 #Инициализируем переменную total_luminosity для хранения общего уровня светимости.
+    for i, events_folder in enumerate(events_folders): 
+        event_files = natsorted(os.listdir(events_folder)) 
+        images_folder = images_folders[i] 
+        image_files = natsorted(os.listdir(images_folder)) 
+        total_luminosity = 0 
         
-        for j, event_image in enumerate(event_files): #Начинается вложенный цикл по изображениям в event_files, где j - индекс текущего изображения, event_image - само изображение.
-            event_image_path = os.path.join(events_folder, event_image) #Создаем путь к текущему изображению в events_folder.
-            event_image_data = cv2.imread(event_image_path, cv2.IMREAD_GRAYSCALE) #Считываем изображение с использованием OpenCV в оттенках серого и сохраняем в event_image_data
-            white_pixels = np.where(event_image_data > 0) #Находим позиции белых пикселей на изображении.
+        for j, event_image in enumerate(event_files): 
+            event_image_path = os.path.join(events_folder, event_image) 
+            event_image_data = cv2.imread(event_image_path, cv2.IMREAD_GRAYSCALE)
+            white_pixels = np.where(event_image_data > 0) 
             
-            image_image = image_files[j] #Получаем имя соответствующего изображения из image_files.
-            image_image_path = os.path.join(images_folder, image_image) #Создаем путь к соответствующему изображению в images_folder
-            image_image_data = cv2.imread(image_image_path, cv2.IMREAD_GRAYSCALE)#Считываем изображение с использованием OpenCV в оттенках серого и сохраняем в image_data
-            luminosity = np.mean(image_image_data[white_pixels])#Вычисляем средний уровень светимости для белых пикселей на изображении c активностью
-            total_luminosity += luminosity#Добавляем текущий уровень светимости к общему уровню светимости
-        mean_luminosity.append(total_luminosity / len(event_files)) #обавляем средний уровень светимости для текущего события в список mean_luminosity
+            image_image = image_files[j] 
+            image_image_path = os.path.join(images_folder, image_image) 
+            image_image_data = cv2.imread(image_image_path, cv2.IMREAD_GRAYSCALE)
+            luminosity = np.mean(image_image_data[white_pixels])
+            total_luminosity += luminosity
+        mean_luminosity.append(total_luminosity / len(event_files)) 
     
     return mean_luminosity
